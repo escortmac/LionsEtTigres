@@ -17,8 +17,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var faitAleatoireEtiquette: UILabel!
     
     var tigres:[Tigre] = [] // déclaration et init du tableau des Instances de la Classe Tigre
+    var lions:[Lion] = []
     
     var indiceCourant = 0
+    
+    var tupleAnimalCourant = (espèce: "Tigre", indice: 0)
+    
+    var lionceaux : [Lionceau] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,10 +77,57 @@ class ViewController: UIViewController {
         
         quatriemeTigre.age = quatriemeTigre.ageEnAnneesDeTigre(quatriemeTigre.age)
         
-        tigres += [secondTigre, troisiemeTigre, quatriemeTigre]
-        
         unTigre.crierPlusieursFois(4)
         secondTigre.crierPlusieursFois(2)
+        
+        self.tigres += [secondTigre, troisiemeTigre, quatriemeTigre]
+        
+        var lion = Lion() // initialisation d'une instance de Lion
+        lion.age = 4
+        lion.estMaleAlpha = false
+        lion.image = UIImage (named: "lion.jpg")
+        lion.nom = "Mufasa"
+        lion.sousEspeces = "Afrique de l'Ouest"
+       
+        println("l'âge du Lion est \(lion.age) et le nom du lion est \(lion.nom) et la sous-espèce est \(lion.sousEspeces)")
+        
+        lion.rugir()
+        lion.changerVersAlphaMale()
+        
+        if lion.estMaleAlpha == true {
+            println("Le lion est maintenant un Alpha")
+        }
+        
+        var lionne = Lion()
+        lionne.age = 3
+        lionne.nom = "Sarabi"
+        lionne.image = UIImage(named: "Lioness.jpeg")
+        lionne.estMaleAlpha = false
+        lionne.sousEspeces = "barbary"
+        
+        lionne.rugir()
+        
+        self.lions += [lion, lionne]
+        
+        var lionceau = Lionceau() //instanciation de la Classe Lionceau
+        lionceau.age = 1
+        lionceau.nom = "Simba"
+        lionceau.image = UIImage (named: "LionCub1.jpg")
+        lionceau.sousEspeces = "Masai"
+        lionceau.estMale = true
+        
+        println("Lionceau devrait rugir après cette déclaration")
+        lionceau.rugir()
+        lionceau.frotterLeVentreDuLionceau()
+        
+        var lioncelle = Lionceau()
+        lioncelle.age = 1
+        lioncelle.nom = "Nala"
+        lioncelle.image = UIImage (named: "LionCub2.jpeg")
+        lioncelle.sousEspeces = "Transvaal"
+        lioncelle.estMale = false
+        
+        self.lionceaux += [lionceau, lioncelle]
         
         
     }
@@ -84,9 +136,69 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func miseAJourAnimal () {
+        switch tupleAnimalCourant {
+        case ("Tigre", _) :
+            let indiceAleatoire = Int(arc4random_uniform(UInt32(lions.count)))
+            tupleAnimalCourant = ("Lion", indiceAleatoire)
+        case ("Lion",_) :
+            let indiceAleatoire = Int(arc4random_uniform(UInt32(lionceaux.count)))
+            tupleAnimalCourant = ("Lionceau", indiceAleatoire)
+            
+        default :
+            let indiceAleatoire = Int(arc4random_uniform(UInt32(tigres.count)))
+            tupleAnimalCourant = ("Tigre", indiceAleatoire)
+        }
+    }
+    
+    func miseAJourVue () {
+        UIView.transitionWithView(
+            self.view,
+            duration: 2,
+            options: UIViewAnimationOptions.TransitionCrossDissolve,
+            animations: {
+                
+                if self.tupleAnimalCourant.espèce == "Tigre" {
+                    let tigre = self.tigres[self.tupleAnimalCourant.indice]
+                    self.monImage.image = tigre.image
+                    self.race.text = tigre.race
+                    self.age.text = "\(tigre.age)"
+                    self.nom.text = tigre.nom
+                    self.faitAleatoireEtiquette.text = tigre.faitAleatoire()
+                    
+                } else if self.tupleAnimalCourant.espèce == "Lion" {
+                    let lion = self.lions [self.tupleAnimalCourant.indice]
+                    self.monImage.image = lion.image
+                    self.race.text = lion.sousEspeces
+                    self.age.text = "\(lion.age)"
+                    self.nom.text = lion.nom
+                    self.faitAleatoireEtiquette.text = lion.faitAleatoire()
+                } else if self.tupleAnimalCourant.espèce == "Lionceau" {
+                    let lionceau = self.lionceaux [self.tupleAnimalCourant.indice]
+                    self.monImage.image = lionceau.image
+                    self.race.text = lionceau.sousEspeces
+                    self.nom.text = lionceau.nom
+                    self.age.text = "\(lionceau.age)"
+                    self.faitAleatoireEtiquette.text = lionceau.faitAleatoire()
+                }
+
+            },
+            completion: {
+                (finished:Bool) -> () in
+        })
+    }
 
     @IBAction func boutonSuivantBarreDOutil(sender: UIBarButtonItem) {
         
+        println("\(sender)")
+//        miseAJourTigre()
+
+        miseAJourAnimal()
+        miseAJourVue()
+    }
+
+    func miseAJourTigre () {
         var indiceAleatoire:Int
         
         do {
@@ -96,10 +208,10 @@ class ViewController: UIViewController {
         indiceCourant = indiceAleatoire
         
         let tigre = tigres[indiceAleatoire]
-//        monImage.image = tigre.image
-//        nom.text = tigre.nom
-//        age.text = "\(tigre.age)"
-//        race.text = tigre.race
+        //        monImage.image = tigre.image
+        //        nom.text = tigre.nom
+        //        age.text = "\(tigre.age)"
+        //        race.text = tigre.race
         
         
         UIView.transitionWithView(
@@ -116,7 +228,7 @@ class ViewController: UIViewController {
             completion: {
                 (finished:Bool) -> () in
         })
+        
     }
-
 }
 

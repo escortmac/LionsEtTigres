@@ -40,6 +40,9 @@ struct Tigre {
     }
     
     func faitAleatoire () -> String {
+        
+//        self.race = ""
+        
         let nombreAleatoire = Int(arc4random_uniform(UInt32(3)))
         var faitAleatoire:String
         
