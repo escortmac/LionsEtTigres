@@ -18,13 +18,12 @@ class ViewController: UIViewController {
     
     var tigres:[Tigre] = [] // déclaration et init du tableau des Instances de la Classe Tigre
     var lions:[Lion] = []
+    var lionceaux : [Lionceau] = []
     
     var indiceCourant = 0
     
     var tupleAnimalCourant = (espèce: "Tigre", indice: 0)
-    
-    var lionceaux : [Lionceau] = []
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
